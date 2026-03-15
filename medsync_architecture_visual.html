@@ -1,0 +1,424 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Mono:wght@500&display=swap');
+
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:#0b0f1a;
+    font-family:'Plus Jakarta Sans',sans-serif;
+    color:#e2e8f0;
+    min-height:100vh;
+    padding:32px 20px 48px;
+  }
+
+  /* ── HEADER ── */
+  .header{text-align:center;margin-bottom:40px;}
+  .header h1{
+    font-size:28px;font-weight:800;letter-spacing:-0.5px;
+    background:linear-gradient(135deg,#38bdf8 0%,#818cf8 60%,#f472b6 100%);
+    -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  }
+  .header p{color:#64748b;font-size:13px;margin-top:6px;font-weight:500;letter-spacing:0.5px;text-transform:uppercase;}
+
+  /* ── LAYOUT ── */
+  .diagram{display:flex;flex-direction:column;align-items:center;gap:0;width:100%;max-width:820px;margin:0 auto;}
+
+  /* ── ROW ── */
+  .row{display:flex;justify-content:center;align-items:flex-start;gap:14px;width:100%;}
+
+  /* ── ARROW ── */
+  .arrow-down{display:flex;flex-direction:column;align-items:center;margin:4px 0;}
+  .arrow-down .line{width:2px;height:28px;background:linear-gradient(to bottom,#334155,#475569);}
+  .arrow-down .head{width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid #475569;}
+  .arrow-label{font-size:10px;color:#475569;font-family:'Fira Mono',monospace;margin-top:2px;letter-spacing:0.3px;}
+
+  /* ── CARD ── */
+  .card{
+    border-radius:14px;padding:14px 16px;
+    display:flex;flex-direction:column;align-items:center;gap:6px;
+    position:relative;border:1px solid transparent;
+    transition:transform .2s,box-shadow .2s;cursor:default;
+    text-align:center;min-width:120px;
+  }
+  .card:hover{transform:translateY(-3px);}
+
+  /* card themes */
+  .card.user{background:#0f172a;border-color:#1e293b;box-shadow:0 0 0 1px #1e293b;}
+  .card.user:hover{box-shadow:0 8px 24px #0ea5e920;}
+  .card.frontend{background:linear-gradient(135deg,#1e1b4b,#312e81);border-color:#4338ca;box-shadow:0 4px 20px #4338ca22;}
+  .card.auth{background:linear-gradient(135deg,#1c1917,#292524);border-color:#f97316;box-shadow:0 4px 20px #f9731622;}
+  .card.ms{background:linear-gradient(135deg,#0c1a2e,#0f2545);border-color:#0ea5e9;box-shadow:0 4px 16px #0ea5e920;}
+  .card.ai{background:linear-gradient(135deg,#1a1100,#2d1d00);border-color:#f59e0b;box-shadow:0 4px 20px #f59e0b33;}
+  .card.db{background:linear-gradient(135deg,#0a1a0f,#0f2d1a);border-color:#22c55e;box-shadow:0 4px 16px #22c55e20;}
+  .card.pdf{background:#111827;border-color:#6366f1;box-shadow:0 4px 14px #6366f120;}
+
+  /* ── LOGO circles ── */
+  .logo{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+  .logo.person{background:#1e3a5f;}
+  .logo.java{background:#fff;padding:4px;}
+  .logo.spring{background:#1a2e1a;}
+  .logo.mysql{background:#003c6c;}
+  .logo.aws{background:#1a1a2e;}
+  .logo.sendgrid{background:#1a2a3a;}
+  .logo.openai{background:#0a0a0a;}
+  .logo.jwt{background:#1a1a1a;}
+  .logo.html{background:#2a1800;}
+  .logo.pdf-logo{background:#2a1a2a;}
+
+  /* ── CARD TEXT ── */
+  .card-title{font-size:13px;font-weight:700;color:#f1f5f9;line-height:1.2;}
+  .card-sub{font-size:10.5px;color:#64748b;font-weight:500;line-height:1.3;}
+  .tech-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:4px;}
+  .pill{font-size:9.5px;font-family:'Fira Mono',monospace;padding:2px 7px;border-radius:20px;font-weight:500;white-space:nowrap;}
+  .pill.blue{background:#0c2a44;color:#38bdf8;border:1px solid #0ea5e930;}
+  .pill.orange{background:#2a1300;color:#fb923c;border:1px solid #f9731630;}
+  .pill.green{background:#0a2014;color:#4ade80;border:1px solid #22c55e30;}
+  .pill.purple{background:#1a1040;color:#a5b4fc;border:1px solid #6366f130;}
+  .pill.amber{background:#1a1000;color:#fbbf24;border:1px solid #f59e0b30;}
+  .pill.pink{background:#2a0a1a;color:#f472b6;border:1px solid #ec489930;}
+  .pill.gray{background:#1a1a2a;color:#94a3b8;border:1px solid #33415530;}
+
+  /* ── SECTION LABEL ── */
+  .section-label{
+    font-size:9px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;
+    color:#334155;margin-bottom:6px;text-align:center;width:100%;
+  }
+
+  /* ── MICROSERVICES CONTAINER ── */
+  .ms-container{
+    background:#060d1a;border:1px dashed #1e3a5f;border-radius:16px;
+    padding:16px 14px;width:100%;max-width:780px;
+  }
+  .ms-container .section-label{color:#1d4ed8;margin-bottom:12px;}
+  .ms-row{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+
+  /* ── DATA LAYER ── */
+  .data-row{display:flex;gap:14px;justify-content:center;width:100%;flex-wrap:wrap;}
+
+  /* ── SVG LOGOS ── */
+  svg.icon{width:28px;height:28px;}
+
+  /* connecting lines between ms cards */
+  .ms-connector{display:flex;align-items:center;color:#1e3a5f;font-size:16px;padding-top:18px;}
+
+  /* badge */
+  .badge{
+    position:absolute;top:-8px;right:-8px;
+    font-size:8px;font-weight:700;letter-spacing:0.5px;
+    padding:2px 7px;border-radius:20px;text-transform:uppercase;
+  }
+  .badge.ai-badge{background:#f59e0b;color:#000;}
+  .badge.jwt-badge{background:#6366f1;color:#fff;}
+
+  /* roles top row */
+  .roles-row{display:flex;gap:14px;justify-content:center;width:100%;}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>⚕ MedSync Architecture</h1>
+  <p>AI-Powered Hospital Management System</p>
+</div>
+
+<div class="diagram">
+
+  <!-- SECTION: USERS -->
+  <div class="section-label">👥 User Roles</div>
+  <div class="roles-row">
+
+    <!-- Admin -->
+    <div class="card user" style="min-width:150px;">
+      <div class="logo person">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="34" height="34">
+          <circle cx="20" cy="14" r="8" fill="#38bdf8"/>
+          <rect x="6" y="28" width="28" height="10" rx="5" fill="#38bdf8" opacity=".6"/>
+          <!-- crown -->
+          <polygon points="10,20 14,14 18,18 20,12 22,18 26,14 30,20" fill="#fbbf24" opacity=".9"/>
+        </svg>
+      </div>
+      <div class="card-title">Admin</div>
+      <div class="card-sub">Doctors · Staff · Settings</div>
+      <div class="tech-pills"><span class="pill purple">ROLE_ADMIN</span></div>
+    </div>
+
+    <!-- Receptionist -->
+    <div class="card user" style="min-width:160px;">
+      <div class="logo person">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="34" height="34">
+          <circle cx="20" cy="13" r="8" fill="#818cf8"/>
+          <rect x="6" y="27" width="28" height="11" rx="5" fill="#818cf8" opacity=".6"/>
+          <!-- desk -->
+          <rect x="8" y="30" width="24" height="4" rx="2" fill="#4f46e5" opacity=".5"/>
+        </svg>
+      </div>
+      <div class="card-title">Receptionist</div>
+      <div class="card-sub">Patients · Beds · Discharge</div>
+      <div class="tech-pills"><span class="pill purple">ROLE_RECEPTIONIST</span></div>
+    </div>
+
+    <!-- Doctor -->
+    <div class="card user" style="min-width:150px;">
+      <div class="logo person">
+        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" width="34" height="34">
+          <circle cx="20" cy="13" r="8" fill="#34d399"/>
+          <rect x="6" y="27" width="28" height="11" rx="5" fill="#34d399" opacity=".6"/>
+          <!-- stethoscope hint -->
+          <circle cx="20" cy="33" r="3" fill="#059669" opacity=".8"/>
+          <path d="M14 28 Q14 35 20 35" stroke="#059669" stroke-width="1.5" fill="none"/>
+        </svg>
+      </div>
+      <div class="card-title">Doctor</div>
+      <div class="card-sub">Diagnose · Prescribe</div>
+      <div class="tech-pills"><span class="pill green">ROLE_DOCTOR</span></div>
+    </div>
+
+  </div><!-- /roles-row -->
+
+  <div class="arrow-down"><div class="line"></div><div class="head"></div><div class="arrow-label">HTTPS</div></div>
+
+  <!-- FRONTEND -->
+  <div class="section-label">🖥 Presentation Layer</div>
+  <div class="card frontend" style="width:340px;">
+    <div style="display:flex;gap:10px;align-items:center;">
+      <!-- HTML5 logo -->
+      <div class="logo html">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#e34f26"/>
+          <path d="M16 28.5l7.8-2.2 2-22.3H16z" fill="#ef652a"/>
+          <path d="M16 13h-4.2l-.3-3.3H16V6.5H8.2l.8 9.1H16zm0 9.2l-.1.1-3.3-.9-.2-2.5H9.2l.4 5 6.3 1.8h.1z" fill="#fff"/>
+          <path d="M16 13v3.6h3.9l-.4 4.7-3.5.9v3.7l6.3-1.8.9-10H16zm.3-9.8v3.4h7.5l.3-3.4z" fill="#ebebeb"/>
+        </svg>
+      </div>
+      <!-- CSS -->
+      <div class="logo" style="background:#0d2137;">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 2l2.4 27L16 31l9.6-2L28 2z" fill="#1572b6"/>
+          <path d="M16 28.5l7.8-2.2 2-22.3H16z" fill="#33a9dc"/>
+          <path d="M16 13H8.8l.2 3.3H16v-3.3zm0-6.5H8l.3 3.3H16V6.5zm0 13.7l-.1.1-3.3-.9-.2-2.2H9.2l.4 4.6 6.3 1.8h.1v-3.4z" fill="#fff"/>
+          <path d="M16 13v3.3h3.7l-.4 4.4-3.3.9v3.4l6.2-1.8.5-6.3.5-3.9H16zm.3-6.5v3.3h7.2l.3-3.3z" fill="#ebebeb"/>
+        </svg>
+      </div>
+      <!-- JS -->
+      <div class="logo" style="background:#1a1a00;">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="4" fill="#f7df1e"/>
+          <path d="M9.5 24.5l2.2-1.3c.4.8.8 1.4 1.7 1.4.9 0 1.4-.4 1.4-1.8v-9.7h2.7v9.8c0 3-1.7 4.3-4.2 4.3-2.2 0-3.5-1.2-4.2-2.7zm10.3-.3l2.2-1.3c.6 1 1.3 1.7 2.7 1.7 1.1 0 1.8-.6 1.8-1.3 0-.9-.7-1.2-1.9-1.8l-.7-.3c-1.9-.8-3.1-1.8-3.1-4 0-2 1.5-3.5 3.8-3.5 1.7 0 2.9.6 3.7 2.1l-2.1 1.4c-.4-.8-.9-1.1-1.7-1.1-.7 0-1.2.5-1.2 1.1 0 .8.5 1.1 1.6 1.6l.7.3c2.2 1 3.4 2 3.4 4.2 0 2.4-1.9 3.7-4.4 3.7-2.4 0-4-1.2-4.8-2.8z" fill="#000"/>
+        </svg>
+      </div>
+    </div>
+    <div class="card-title" style="font-size:15px;">Frontend UI</div>
+    <div class="card-sub">HTML · CSS · JavaScript</div>
+  </div>
+
+  <div class="arrow-down"><div class="line"></div><div class="head"></div></div>
+
+  <!-- AUTH SERVICE -->
+  <div class="section-label">🔐 Security Layer</div>
+  <div class="card auth" style="width:340px;">
+    <div class="badge jwt-badge">JWT</div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <!-- Spring Security shield -->
+      <div class="logo spring">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="16" cy="16" r="14" fill="#6db33f"/>
+          <path d="M16 5L8 9v7c0 5.5 3.5 10.7 8 12 4.5-1.3 8-6.5 8-12V9z" fill="#fff" opacity=".15"/>
+          <path d="M12 16l3 3 5-5" stroke="#fff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <!-- JWT token icon -->
+      <div class="logo jwt">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#1a1a2e"/>
+          <text x="4" y="22" font-size="12" font-weight="700" fill="#d63aff" font-family="monospace">JWT</text>
+        </svg>
+      </div>
+    </div>
+    <div class="card-title" style="font-size:15px;">Authentication Service</div>
+    <div class="tech-pills">
+      <span class="pill orange">Spring Security</span>
+      <span class="pill purple">JWT Tokens</span>
+      <span class="pill gray">RBAC</span>
+    </div>
+  </div>
+
+  <div class="arrow-down"><div class="line"></div><div class="head"></div><div class="arrow-label">secured API calls</div></div>
+
+  <!-- MICROSERVICES -->
+  <div class="ms-container">
+    <div class="section-label">⚙ Spring Boot Microservices</div>
+    <div class="ms-row">
+
+      <!-- Doctor Service -->
+      <div class="card ms" style="min-width:120px;max-width:140px;">
+        <div style="font-size:26px;">👨‍⚕️</div>
+        <div class="card-title">Doctor</div>
+        <div class="card-sub">Schedules &amp; details</div>
+        <div class="tech-pills"><span class="pill blue">Java</span></div>
+      </div>
+
+      <div class="ms-connector">→</div>
+
+      <!-- Patient Service -->
+      <div class="card ms" style="min-width:120px;max-width:140px;">
+        <div style="font-size:26px;">🧑‍🦽</div>
+        <div class="card-title">Patient</div>
+        <div class="card-sub">Records &amp; history</div>
+        <div class="tech-pills"><span class="pill blue">Java</span></div>
+      </div>
+
+      <div class="ms-connector">→</div>
+
+      <!-- Appointment Service -->
+      <div class="card ms" style="min-width:120px;max-width:140px;">
+        <div style="font-size:26px;">📅</div>
+        <div class="card-title">Appointment</div>
+        <div class="card-sub">Book &amp; updates</div>
+        <div class="tech-pills"><span class="pill blue">Java</span></div>
+      </div>
+
+      <div class="ms-connector">→</div>
+
+      <!-- Notification Service -->
+      <div class="card ms" style="min-width:120px;max-width:140px;">
+        <div style="font-size:26px;">🔔</div>
+        <div class="card-title">Notification</div>
+        <div class="card-sub">Email alerts</div>
+        <div class="tech-pills"><span class="pill blue">Java</span></div>
+      </div>
+
+      <div class="ms-connector">→</div>
+
+      <!-- Storage Service -->
+      <div class="card ms" style="min-width:120px;max-width:140px;">
+        <div style="font-size:26px;">🗂️</div>
+        <div class="card-title">Storage</div>
+        <div class="card-sub">PDF &amp; S3 upload</div>
+        <div class="tech-pills"><span class="pill blue">Java</span></div>
+      </div>
+
+    </div><!-- /ms-row -->
+
+    <div style="display:flex;justify-content:center;margin-top:12px;">
+      <div class="arrow-down"><div class="line" style="height:16px;"></div><div class="head"></div></div>
+    </div>
+
+    <!-- AI Layer inside container -->
+    <div class="card ai" style="width:100%;flex-direction:row;padding:14px 20px;gap:16px;text-align:left;border-radius:12px;">
+      <div class="badge ai-badge">AI</div>
+      <div style="display:flex;gap:10px;">
+        <!-- OpenAI logo -->
+        <div class="logo openai">
+          <svg viewBox="0 0 41 41" width="28" height="28" xmlns="http://www.w3.org/2000/svg" fill="white">
+            <path d="M37.5 16.8c.9-2.6.6-5.5-.9-7.8-2.3-3.4-6.2-5.1-10.1-4.3C24.8 2.3 22.5.7 20 .7c-4 0-7.4 2.6-8.6 6.4-2.7.6-5 2.3-6.4 4.7-2.2 3.5-1.7 8 1.1 11-.9 2.6-.6 5.5.9 7.8 2.3 3.4 6.2 5.1 10.1 4.3 1.7 2.4 4 4 6.5 4 4 0 7.4-2.6 8.6-6.4 2.7-.6 5-2.3 6.4-4.7 2.2-3.5 1.7-8-1.1-11zm-14 17.8c-1.5 0-2.8-.5-3.9-1.4l.2-.1 6.4-3.7c.3-.2.5-.5.5-.8v-9l2.7 1.6v7.5c0 3.5-2.8 6-6 5.9zm-12.9-5.5c-.7-1.3-1-2.7-.7-4.2l.2.1 6.4 3.7c.3.2.7.2 1 0l7.8-4.5v3.2l-6.5 3.8c-3 1.7-6.9.7-8.2-2.1zM8 13.1c.7-1.3 1.9-2.3 3.2-2.8v7.5c0 .3.2.6.5.8l7.8 4.5-2.7 1.6L10.4 21C7.4 19.3 6.6 15.3 8 13.1zm21.8 8.4l-7.8-4.5 2.7-1.6 6.4 3.7c3 1.7 3.8 5.7 1.7 8.5-.7 1.2-1.9 2.2-3.2 2.7v-7.5c-.1-.3-.2-.6-.5-.8h-.3zM32.4 18l-.2-.1-6.4-3.7c-.3-.2-.7-.2-1 0L17 18.7v-3.2l6.5-3.8c3-1.7 6.9-.7 8.2 2.1.7 1.3 1 2.7.7 4.2zM15.1 22l-2.7-1.6v-7.5c0-3.5 2.8-6.1 6.1-6.1 1.5 0 2.8.5 3.9 1.4l-.2.1-6.4 3.7c-.3.2-.5.5-.5.8L15.1 22zm1.5-3.2l3.5-2 3.5 2v4l-3.5 2-3.5-2v-4z"/>
+          </svg>
+        </div>
+        <!-- Spring AI -->
+        <div class="logo spring">
+          <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="14" fill="#6db33f"/>
+            <text x="7" y="20" font-size="10" font-weight="700" fill="#fff" font-family="monospace">AI</text>
+          </svg>
+        </div>
+      </div>
+      <div style="flex:1;">
+        <div class="card-title" style="font-size:14px;text-align:left;">Spring AI + OpenAI Integration</div>
+        <div class="tech-pills" style="justify-content:flex-start;margin-top:6px;">
+          <span class="pill amber">Diet recommendations</span>
+          <span class="pill amber">Diagnosis assist</span>
+          <span class="pill amber">Discharge summaries</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /ms-container -->
+
+  <div class="arrow-down"><div class="line"></div><div class="head"></div></div>
+
+  <!-- DATA LAYER -->
+  <div class="section-label">🗄 Data &amp; External Services</div>
+  <div class="data-row">
+
+    <!-- MySQL -->
+    <div class="card db" style="min-width:160px;">
+      <div class="logo mysql">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <path d="M2 21c2.3-3 4.8-2 7.5-2.5 1-.2 2-.8 2.3-1.8.6-2.2-1.4-4.3.2-6.5C13.3 8.3 16 8 18 9.5c1.7 1.3 2 3.5 4 4.5 2.5 1.3 5.5.5 8-1" fill="none" stroke="#00758f" stroke-width="2"/>
+          <path d="M2 10c3.5-.5 7-.3 9 2.5 1 1.5.5 3.5 2 4.5 1.8 1.3 4.3.3 6 1.5 2 1.5 1.5 4 3.5 5.5 1.5 1 3.5 1 5 .5" fill="none" stroke="#f29111" stroke-width="2"/>
+          <text x="6" y="28" font-size="8" font-weight="700" fill="#00758f" font-family="monospace">MySQL</text>
+        </svg>
+      </div>
+      <div class="card-title">MySQL Database</div>
+      <div class="card-sub">Patients · Doctors · Appointments</div>
+      <div class="tech-pills"><span class="pill green">InnoDB</span><span class="pill green">Spring JPA</span></div>
+    </div>
+
+    <!-- AWS S3 -->
+    <div class="card db" style="min-width:160px;">
+      <div class="logo aws">
+        <svg viewBox="0 0 80 80" width="34" height="34" xmlns="http://www.w3.org/2000/svg">
+          <path d="M22 52l-4 2 16 6 16-6-4-2-12 4z" fill="#e25444"/>
+          <path d="M18 50l4 2 12-4 12 4 4-2-16-6z" fill="#912d2b"/>
+          <path d="M40 20L24 26v18l16 6 16-6V26z" fill="#e25444"/>
+          <path d="M40 20L24 26l16 6 16-6z" fill="#912d2b"/>
+          <path d="M24 26v18l16 6V32z" fill="#f7a699"/>
+          <path d="M40 32v18l16-6V26z" fill="#e25444"/>
+        </svg>
+      </div>
+      <div class="card-title">AWS S3</div>
+      <div class="card-sub">Secure PDF Storage</div>
+      <div class="tech-pills"><span class="pill amber">Presigned URLs</span><span class="pill green">CDN</span></div>
+    </div>
+
+    <!-- SendGrid -->
+    <div class="card db" style="min-width:160px;">
+      <div class="logo sendgrid">
+        <svg viewBox="0 0 32 32" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="6" fill="#1a8fff"/>
+          <rect x="6" y="6" width="8" height="8" fill="#fff" opacity=".9"/>
+          <rect x="18" y="6" width="8" height="8" fill="#fff" opacity=".5"/>
+          <rect x="6" y="18" width="8" height="8" fill="#fff" opacity=".5"/>
+          <rect x="18" y="18" width="8" height="8" fill="#fff" opacity=".9"/>
+        </svg>
+      </div>
+      <div class="card-title">SendGrid</div>
+      <div class="card-sub">Email Notifications</div>
+      <div class="tech-pills"><span class="pill blue">Appointments</span><span class="pill blue">Daily Schedules</span></div>
+    </div>
+
+  </div><!-- /data-row -->
+
+  <div class="arrow-down"><div class="line"></div><div class="head"></div><div class="arrow-label">PDF generation</div></div>
+
+  <!-- PDF GENERATION -->
+  <div class="section-label">📄 Document Generation</div>
+  <div class="card pdf" style="width:380px;flex-direction:row;gap:14px;text-align:left;padding:14px 20px;">
+    <div style="font-size:32px;">📋</div>
+    <div>
+      <div class="card-title">PDF Generation Service</div>
+      <div class="tech-pills" style="justify-content:flex-start;margin-top:6px;">
+        <span class="pill purple">Thymeleaf</span>
+        <span class="pill purple">Flying Saucer</span>
+        <span class="pill green">S3 Upload</span>
+        <span class="pill gray">Secure Link</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- LEGEND -->
+  <div style="margin-top:32px;display:flex;gap:20px;flex-wrap:wrap;justify-content:center;padding:16px 20px;background:#0d1220;border-radius:12px;width:100%;max-width:600px;">
+    <div style="font-size:10px;color:#64748b;font-weight:700;letter-spacing:1px;width:100%;text-align:center;text-transform:uppercase;margin-bottom:4px;">Legend</div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:3px;background:#4338ca;"></div><span style="font-size:11px;color:#94a3b8;">Presentation</span></div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:3px;background:#f97316;"></div><span style="font-size:11px;color:#94a3b8;">Security</span></div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:3px;background:#0ea5e9;"></div><span style="font-size:11px;color:#94a3b8;">Microservices</span></div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:3px;background:#f59e0b;"></div><span style="font-size:11px;color:#94a3b8;">AI Layer</span></div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:3px;background:#22c55e;"></div><span style="font-size:11px;color:#94a3b8;">Data &amp; External</span></div>
+    <div style="display:flex;align-items:center;gap:6px;"><div style="width:10px;height:10px;border-radius:3px;background:#6366f1;"></div><span style="font-size:11px;color:#94a3b8;">Documents</span></div>
+  </div>
+
+</div>
+</body>
+</html>
